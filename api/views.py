@@ -4,12 +4,20 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from models import *
 from django.core import serializers
-from .search.musicSearch import getBestOfArtistSongList
+from .search.musicSearch import *
 from django.http import JsonResponse
 import json
 
 # Create your views here.
 
-def getArtist_json(request, artist):
-  results = getBestOfArtistSongList(artist)
+def getMusicArtist_json(request, artist):
+  results = getBestOfArtistTracks(artist)
   return JsonResponse(results)
+
+def getMusicGenreArtists_json(request, genre):
+  results = getBestOfGenreArtists(genre)
+  return JsonResponse(results)
+
+# def getMusicGenreTracks_json(request, genre):
+#   results = getBestOfGenreTracks(genre)
+#   return JsonResponse(results)
