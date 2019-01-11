@@ -18,6 +18,6 @@ def getMusicGenreArtists_json(request, genre):
   results = getBestOfGenreArtists(genre)
   return JsonResponse(results)
 
-# def getMusicGenreTracks_json(request, genre):
-#   results = getBestOfGenreTracks(genre)
-#   return JsonResponse(results)
+def getMusicGenreTracks_json(request, genre):
+  results = getBestOfGenreTracks(genre)
+  return JsonResponse(results)

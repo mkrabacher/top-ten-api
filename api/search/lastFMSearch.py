@@ -99,4 +99,23 @@ def searchLastFMGenreArtists(searchString):
 
 
 def searchLastFMGenreTracks(searchString):
-    return []
+    url = "http://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks"
+    url += "&tag=" + searchString
+    url += "&api_key=" + LastFMAPIKey
+    url += "&format=json"
+
+    print 'Getting data for: ', searchString
+    genreRes = urllib.urlopen(url)
+    genreData = json.loads(genreRes.read())
+    
+    genreTracks = []
+
+    for track in genreData["tracks"]["track"][:10]:
+      returnTracks = {}
+      returnTracks["name"] = track["name"]
+      returnTracks["url"] = track["url"]
+      returnTracks["topTrack"] = getTopArtistTrack(track["name"])
+
+      genreTracks.append(returnTracks)
+
+    return {"tracks": genreTracks}

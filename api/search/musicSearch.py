@@ -12,11 +12,5 @@ def getBestOfArtistTracks(searchTerm):
 def getBestOfGenreArtists(searchTerm):
   return searchLastFMGenreArtists(searchTerm)
 
-# def getBestOfGenreTracks(searchTerm):
-#   LFMsearch = searchLastFMGenreTracks(searchTerm)
-
-#   for track in LFMsearch['tracks']:
-#     track['youtube'] = youtube_search(searchTerm + " " + track['name'])
-
-  
-#   return LFMsearch
+def getBestOfGenreTracks(searchTerm):
+  return searchLastFMGenreTracks(searchTerm)
