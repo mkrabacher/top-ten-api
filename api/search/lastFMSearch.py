@@ -1,8 +1,9 @@
 import json
 import urllib
 from youtubeSearch import youtube_search
+from keys import lastFMKey
 
-LastFMAPIKey = 'd44eace3e6c5ef9f0f25eb0b248ab409'
+LastFMAPIKey = lastFMKey()
 resultsLimit = 10
 
 
@@ -25,7 +26,7 @@ def getTopArtistTrack(artist):
     return topTrack
     
 
-
+# should I separate similar from tracks?
 def searchLastFMArtistTracks(searchString):
     artistUrl = "http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks"
     artistUrl += "&artist=" + searchString
