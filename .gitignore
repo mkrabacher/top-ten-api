@@ -31,5 +31,10 @@ share/python-wheels/
 .installed.cfg
 *.egg
 bugs.txt
-api/urls.pyc
 api/search/keys.py
+api/views.pyc
+api/urls.pyc
+api/search/__init__.pyc
+api/search/lastFMSearch.pyc
+api/search/musicSearch.pyc
+api/search/youtubeSearch.pyc
