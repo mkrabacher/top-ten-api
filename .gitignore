@@ -1,0 +1,8 @@
+api/search/keys.py
+api/urls.pyc
+api/views.pyc
+api/search/keys.pyc
+api/search/lastFMSearch.pyc
+api/search/movieDBSearch.pyc
+api/search/musicSearch.pyc
+api/search/youtubeSearch.pyc
