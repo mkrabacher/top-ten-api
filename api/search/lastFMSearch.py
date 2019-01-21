@@ -1,17 +1,20 @@
 import json
 import urllib
 from youtubeSearch import youtube_search
+from keys import lastFMKey
 
-LastFMAPIKey = 'd44eace3e6c5ef9f0f25eb0b248ab409'
+LastFMAPIKey = lastFMKey()
+resultsLimit = 10
 
 
 def getTopArtistTrack(artist):
-    artistUrl = "http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks"
-    artistUrl += "&artist=" + artist
-    artistUrl += "&api_key=" + LastFMAPIKey
-    artistUrl += "&format=json"
+    url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks"
+    url += "&artist=" + artist
+    url += "&api_key=" + LastFMAPIKey
+    url += "&limit=" + str(resultsLimit)
+    url += "&format=json"
     
-    artistRes = urllib.urlopen(artistUrl)
+    artistRes = urllib.urlopen(url)
     artistData = json.loads(artistRes.read())
 
     topTrack = {}
@@ -23,11 +26,12 @@ def getTopArtistTrack(artist):
     return topTrack
     
 
-
+# should I separate similar from tracks?
 def searchLastFMArtistTracks(searchString):
     artistUrl = "http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks"
     artistUrl += "&artist=" + searchString
     artistUrl += "&api_key=" + LastFMAPIKey
+    artistUrl += "&limit=" + str(resultsLimit)
     artistUrl += "&format=json"
 
     print 'Getting data for: ', searchString
@@ -37,6 +41,7 @@ def searchLastFMArtistTracks(searchString):
     similarUrl = "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar"
     similarUrl += "&artist=" + searchString
     similarUrl += "&api_key=" + LastFMAPIKey
+    similarUrl += "&limit=" + str(5)
     similarUrl += "&format=json"
 
     similarRes = urllib.urlopen(similarUrl)
@@ -59,7 +64,7 @@ def searchLastFMArtistTracks(searchString):
 
     similar = []
 
-    for similarArtist in similarData["similarartists"]["artist"][:5]:
+    for similarArtist in similarData["similarartists"]["artist"]:
         returnArtist = {}
         returnArtist["artistName"] = similarArtist['name']
         returnArtist["url"] = similarArtist['url']
@@ -68,7 +73,7 @@ def searchLastFMArtistTracks(searchString):
         similar.append(returnArtist)
 
     result = {}
-    result["tracks"] = tracks[:10]
+    result["tracks"] = tracks
     result["artist"] = artist
     result["similar"] = similar
 
@@ -79,6 +84,7 @@ def searchLastFMGenreArtists(searchString):
     url = "http://ws.audioscrobbler.com/2.0/?method=tag.gettopartists"
     url += "&tag=" + searchString
     url += "&api_key=" + LastFMAPIKey
+    url += "&limit=" + str(resultsLimit)
     url += "&format=json"
 
     print 'Getting data for: ', searchString
@@ -87,7 +93,7 @@ def searchLastFMGenreArtists(searchString):
     
     genreArtists = []
 
-    for artist in genreData["topartists"]["artist"][:10]:
+    for artist in genreData["topartists"]["artist"]:
       returnArtist = {}
       returnArtist["name"] = artist["name"]
       returnArtist["url"] = artist["url"]
@@ -99,4 +105,24 @@ def searchLastFMGenreArtists(searchString):
 
 
 def searchLastFMGenreTracks(searchString):
-    return []
+    url = "http://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks"
+    url += "&tag=" + searchString
+    url += "&api_key=" + LastFMAPIKey
+    url += "&limit=" + str(resultsLimit)
+    url += "&format=json"
+
+    print 'Getting data for: ', searchString
+    genreRes = urllib.urlopen(url)
+    genreData = json.loads(genreRes.read())
+    
+    genreTracks = []
+
+    for track in genreData["tracks"]["track"]:
+      returnTracks = {}
+      returnTracks["name"] = track["name"]
+      returnTracks["url"] = track["url"]
+      returnTracks["topTrack"] = getTopArtistTrack(track["name"])
+
+      genreTracks.append(returnTracks)
+
+    return {"tracks": genreTracks}
